@@ -1,0 +1,24 @@
+{
+  "setupFilesAfterEnv": [
+    "<rootDir>/src/test/setupTests.ts"
+  ],
+  "testEnvironment": "jest-environment-jsdom",
+  "moduleNameMapper": {
+    "\\.(gif|ttf|eot|svg|png)$": "<rootDir>/src/test/fileMock.ts",
+    "\\.(css|less)$": "identity-obj-proxy"
+  },
+  "coverageReporters": [
+    "json-summary",
+    "text",
+    "lcov"
+  ],
+  "coverageThreshold": {
+    "global": {
+      "lines": 52,
+      "statements": 42,
+      "functions": 27,
+      "branches": 90
+    }
+  },
+  "reporters": [ "default", "jest-junit" ]
+}
