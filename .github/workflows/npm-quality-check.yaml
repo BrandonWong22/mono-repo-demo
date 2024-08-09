@@ -4,13 +4,18 @@ on:
   workflow_call:
     inputs:
       ui-working-directory:
-        description: 'The path of the frontend'
+        description: "The path of the frontend"
         required: true
         type: string
 
 env:
   CODE_COVERAGE_MODIFIER: ${{ vars.CODE_COVERAGE_MODIFIER }}
   RAMPING_CODE_COVERAGE_CAP: ${{ vars.RAMPING_CODE_COVERAGE_CAP }}
+
+permissions:
+  id-token: write
+  contents: read
+  checks: write
 
 jobs:
   check-npm-quality-on-ui:
@@ -25,7 +30,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: "18"
 
       - name: Install dependencies
         run: npm install
@@ -37,18 +42,18 @@ jobs:
       - name: Run npm lint
         run: |
           npm run lint
-      
+
       - name: Run unit tests
-        if: success() || failure()   
-        run: npm test 
-      
+        if: success() || failure()
+        run: npm test
+
       - name: Unit tests Report
         uses: dorny/test-reporter@v1
-        if: success() || failure()   
+        if: success() || failure()
         with:
           name: JEST Tests
           path: ${{ inputs.ui-working-directory }}/junit.xml
-          reporter: jest-junit  
+          reporter: jest-junit
 
       - name: Run coverage and print results
         run: |
@@ -198,7 +203,7 @@ jobs:
             coverageCovered=false
           fi
           echo "coverageCovered=$coverageCovered" >> $GITHUB_OUTPUT
-          
+
       - name: Comment on PR if coverage in not minimum
         if: steps.coverage-check.outputs.coverageCovered == 'false'
         uses: actions/github-script@v6
@@ -210,4 +215,4 @@ jobs:
               repo: context.repo.repo,
               body: 'PR coverage does not exceed the required coverage.'
             })
-                          
+
